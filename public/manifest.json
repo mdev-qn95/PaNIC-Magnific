@@ -1,0 +1,10 @@
+{
+  "name": "PaNIC-Magnific — Phụng Vụ Slides",
+  "short_name": "Magnific",
+  "description": "Ứng dụng trình chiếu thánh lễ cho giáo xứ",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F5F8F3",
+  "theme_color": "#2E7D46",
+  "lang": "vi"
+}

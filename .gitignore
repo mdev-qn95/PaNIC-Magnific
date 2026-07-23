@@ -1,0 +1,15 @@
+node_modules/
+.next/
+out/
+build/
+.env
+.env*.local
+*.tsbuildinfo
+.DS_Store
+
+# Dữ liệu nguồn bản .doc (Sách Hát Cộng Đồng, Đáp Ca – Tung Hô) — có thể vướng
+# bản quyền, không phát tán công khai. Nội dung đã nhập vào DB.
+doc/
+
+# Cấu hình / skills cục bộ của Claude Code — không thuộc mã nguồn dự án
+.claude/

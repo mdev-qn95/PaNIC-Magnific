@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PaNIC-Magnific — Mock V4 · Dual Theme (Đồng Xanh ⇄ Tĩnh Lặng)</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Baloo+2:wght@500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THEME TOKENS — toàn bộ khác biệt giữa 2 theme nằm ở đây.
+   App thật: data-theme đặt trên <html>, chọn trong /settings.
+   ============================================================ */
+body[data-theme="dx"]{ /* V3 · Đồng Xanh */
+  --f-d:'Baloo 2',sans-serif;
+  --bg:#F5F8F3; --surface:#FFFFFF; --surface2:#EAF2E9;
+  --ink:#22331F; --ink2:#66795F; --ink3:#9AAB93; --line:#DCE6D8;
+  --heading:#1F4A2C;
+  --primary:#2E7D46; --primary-hover:#276A3C; --primary-soft:#E4F1E8; --on-primary:#FFFFFF;
+  --dk-bg:#C9A227; --dk-color:#FFFFFF;
+  --r:16px; --r2:12px;
+  --lit-xanh:#2E7D46; --lit-tim:#6B3FA0; --lit-do:#B3261E; --lit-trang:#C9A227; --lit-hong:#D77FA1;
+  --slide-bg:linear-gradient(150deg,#FFFFFF 0%,#E9F4EA 100%); --slide-title:#1F4A2C; --slide-strip:4px;
+  --hint-bg:#F7EFD6; --hint-border:#EBDFB4;
+  --pres-bg:#152318; --pres-surface:#1F3324; --pres-ink:#E7F0E4; --pres-line:#2C4633;
+  --pres-accent:#5CBF7A; --pres-accent-ink:#0F1712; --pres-sub:#8FAF98;
+  --sel-ring:rgba(46,125,70,.14); --sel-bg:#FFFFFF;
+}
+body[data-theme="tl"]{ /* B · Tĩnh Lặng */
+  --f-d:'Fraunces',serif;
+  --bg:#F6F4EF; --surface:#FFFFFF; --surface2:#EFEBE2;
+  --ink:#242220; --ink2:#6F6A61; --ink3:#A7A196; --line:#E7E2D8;
+  --heading:#242220;
+  --primary:#B0553B; --primary-hover:#994A32; --primary-soft:#F4E5DE; --on-primary:#FFFFFF;
+  --dk-bg:#5E6B54; --dk-color:#FFFFFF;
+  --r:14px; --r2:10px;
+  --lit-xanh:#5E7A4E; --lit-tim:#6E5296; --lit-do:#B0453A; --lit-trang:#B08A46; --lit-hong:#C58AA0;
+  --slide-bg:#FBFAF6; --slide-title:#242220; --slide-strip:3px;
+  --hint-bg:#EFEBE2; --hint-border:#EFEBE2;
+  --pres-bg:#1C1A16; --pres-surface:#26231D; --pres-ink:#EDE9E0; --pres-line:#38342B;
+  --pres-accent:#D08A6E; --pres-accent-ink:#241a12; --pres-sub:#A79D8C;
+  --sel-ring:rgba(176,85,59,.0); --sel-bg:#F4E5DE;
+}
+:root{--f-b:'Be Vietnam Pro',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--f-b);background:#0F1210;color:var(--ink)}
+
+/* ===== MOCK NAVIGATOR (không thuộc app) ===== */
+.mocknav{position:sticky;top:0;z-index:100;background:#0F1210;border-bottom:1px solid #262B26;padding:10px 16px;display:flex;align-items:center;gap:10px;overflow-x:auto}
+.mocknav .brand{color:#fff;font-weight:700;font-size:13px;white-space:nowrap;font-family:var(--f-d)}
+.mocknav .brand em{color:#8FD6A5;font-style:normal}
+.mocknav .tag{font-size:10px;background:#8FD6A5;color:#101710;font-weight:700;border-radius:4px;padding:2px 7px;letter-spacing:.06em}
+.mocknav button{white-space:nowrap;background:transparent;border:1px solid #334035;color:#A6B5A8;font-family:var(--f-b);font-size:12px;padding:6px 13px;border-radius:20px;cursor:pointer}
+.mocknav button:hover{border-color:#8FD6A5;color:#fff}
+.mocknav button.on{background:#8FD6A5;border-color:#8FD6A5;color:#101710;font-weight:700}
+.mocknav .spacer{flex:1}
+.mocknav .tbtn{border-radius:8px}
+.mocknav .tbtn.ton-dx{background:#2E7D46;border-color:#2E7D46;color:#fff;font-weight:700}
+.mocknav .tbtn.ton-tl{background:#B0553B;border-color:#B0553B;color:#fff;font-weight:700}
+.stage{padding:20px;display:flex;justify-content:center}
+.frame{width:100%;max-width:1180px;background:var(--bg);border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);min-height:700px;display:none}
+.frame.on{display:flex}
+.mocknote{max-width:1180px;margin:0 auto 8px;color:#7E9587;font-size:12px;padding:0 6px}
+
+/* ===== APP SHELL (chung — style theo token) ===== */
+.sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--line);color:var(--ink2);display:flex;flex-direction:column;padding:22px 0}
+body[data-theme="tl"] .sidebar{background:var(--bg)}
+.logo{padding:0 22px 16px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+body[data-theme="tl"] .logo{border-bottom:none;padding-bottom:20px}
+.logo b{font-family:var(--f-d);font-size:19px;color:var(--heading)}
+.logo b span{color:var(--primary)}
+.logo small{display:block;color:var(--ink3);font-size:11px;margin-top:3px}
+.nav a{display:flex;align-items:center;gap:11px;padding:9px 22px;color:var(--ink2);font-size:13.5px;cursor:pointer;position:relative}
+.nav a:hover{color:var(--heading)}
+/* Đồng Xanh: mục chọn dạng viên thuốc */
+body[data-theme="dx"] .nav a{border-radius:0 22px 22px 0;margin-right:12px}
+body[data-theme="dx"] .nav a.on{background:var(--primary-soft);color:var(--heading);font-weight:700}
+/* Tĩnh Lặng: mục chọn dạng vạch trái */
+body[data-theme="tl"] .nav a.on{color:var(--ink);font-weight:600}
+body[data-theme="tl"] .nav a.on::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--primary)}
+.nav .sec{font-size:10.5px;letter-spacing:.14em;color:var(--ink3);padding:15px 22px 6px;text-transform:uppercase}
+.season-chip{margin:auto 14px 0;background:var(--primary-soft);border:1px solid var(--line);border-radius:var(--r2);padding:11px 13px;font-size:11.5px;color:var(--ink2)}
+body[data-theme="tl"] .season-chip{background:transparent;border:none;border-top:1px solid var(--line);border-radius:0;margin:auto 20px 0;padding:14px 4px}
+.season-chip b{display:flex;align-items:center;gap:7px;color:var(--heading);font-size:12.5px;margin-bottom:3px;font-family:var(--f-d)}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--lit-xanh)}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:17px 28px;border-bottom:1px solid var(--line);background:var(--surface)}
+body[data-theme="tl"] .topbar{background:transparent;border-bottom:none;padding:22px 32px 10px}
+.topbar h1{font-family:var(--f-d);font-size:21px;font-weight:600;color:var(--heading)}
+body[data-theme="tl"] .topbar h1{font-size:25px;font-weight:500}
+.topbar .sub{font-size:12.5px;color:var(--ink2);margin-top:2px}
+.content{padding:22px 28px;flex:1;overflow:auto}
+body[data-theme="tl"] .content{padding:14px 32px 32px}
+.btn{font-family:var(--f-b);font-size:13px;border-radius:var(--r2);padding:9px 16px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:600}
+.btn:hover{border-color:var(--ink3)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:var(--on-primary)}
+.btn.primary:hover{background:var(--primary-hover)}
+.btn.sm{padding:5px 12px;font-size:12px}
+.row{display:flex;gap:10px;align-items:center}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.badge{font-size:11px;font-weight:700;border-radius:12px;padding:3px 10px;display:inline-flex;align-items:center;gap:5px}
+.b-xanh{background:var(--primary-soft);color:var(--lit-xanh)}
+body[data-theme="tl"] .b-xanh{background:#E9F0E4}
+.b-do{background:#F7E2E0;color:var(--lit-do)}
+input,select,textarea{font-family:var(--f-b);font-size:13px;border:1px solid var(--line);border-radius:var(--r2);padding:9px 13px;background:var(--surface);color:var(--ink);outline:none}
+input:focus,textarea:focus{border-color:var(--primary)}
+label{font-size:12px;font-weight:700;color:var(--ink2);display:block;margin-bottom:5px}
+h3.sec{font-family:var(--f-d);font-size:15px;font-weight:600;margin:18px 0 11px;color:var(--heading)}
+body[data-theme="tl"] h3.sec{font-size:17px;font-weight:500}
+.chip{font-size:12px;border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:5px 13px;cursor:pointer;color:var(--ink2)}
+body[data-theme="tl"] .chip{background:transparent}
+.chip.on{background:var(--primary);color:var(--on-primary);border-color:var(--primary);font-weight:700}
+body[data-theme="tl"] .chip.on{background:var(--ink);border-color:var(--ink)}
+.hint{font-size:12px;color:var(--ink2);background:var(--hint-bg);border:1px solid var(--hint-border);border-radius:var(--r2);padding:10px 13px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.b-tim{background:#EDE4F6;color:var(--lit-tim)}
+.b-trang{background:#F3EAD6;color:#8A6A2E}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.danger{color:var(--lit-do);border-color:#EFD9D7}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);padding:11px 16px;border-bottom:1px solid var(--line)}
+td{padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg)}
+.bgcard{border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--surface)}
+.bgcard .im{height:96px;position:relative}
+.bgcard .fo{position:absolute;width:14px;height:14px;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 2px rgba(0,0,0,.4)}
+.bgcard .meta{padding:8px 10px;font-size:11.5px;display:flex;justify-content:space-between;align-items:center}
+
+/* ===== SLIDE ===== */
+.slide{position:relative;background:var(--slide-bg);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6% 8%}
+.slide::before{content:'';position:absolute;left:0;top:0;bottom:0;width:var(--slide-strip);background:var(--lit-xanh)}
+.slide.tim::before{background:var(--lit-tim)} .slide.do::before{background:var(--lit-do)}
+.slide .t{font-family:var(--f-d);font-weight:600;color:var(--slide-title)}
+body[data-theme="tl"] .slide .t{font-weight:500}
+.slide .l{font-weight:600;line-height:1.6;color:var(--ink)}
+body[data-theme="tl"] .slide .l{font-weight:500}
+.slide .dk{position:absolute;top:6px;right:8px;font-size:9px;font-weight:800;background:var(--dk-bg);color:var(--dk-color);border-radius:5px;padding:1px 6px}
+.slide.img{color:#fff}
+.slide.img .art{position:absolute;inset:0;background:radial-gradient(circle at 70% 25%,rgba(240,223,160,.7),transparent 50%),radial-gradient(circle at 25% 80%,rgba(46,125,70,.55),transparent 55%),linear-gradient(160deg,#1F4A2C,#2E7D46)}
+body[data-theme="tl"] .slide.img .art{background:radial-gradient(circle at 68% 26%,rgba(220,180,150,.55),transparent 55%),linear-gradient(160deg,#3c4a34,#5e6b54)}
+.slide.img .ovl{position:absolute;inset:0;background:rgba(0,0,0,.38)}
+.slide.img .t,.slide.img .l{color:#fff;position:relative;text-shadow:0 1px 5px rgba(0,0,0,.5)}
+.thumb{aspect-ratio:16/9}
+.gridslides{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:13px}
+.gridslides .slide .t{font-size:11px}.gridslides .slide .l{font-size:9px}
+.gridslides figure{cursor:pointer}
+.gridslides figcaption{font-size:10.5px;color:var(--ink2);margin-top:5px;text-align:center}
+
+.mass-item{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;cursor:grab}
+.mass-item.sel{border-color:var(--primary);box-shadow:0 0 0 3px var(--sel-ring);background:var(--sel-bg)}
+.mass-item .grip{color:var(--ink3);font-size:14px;letter-spacing:-2px}
+.mass-item .ic{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--surface2)}
+.mass-item .nm{font-size:13px;font-weight:600}
+.mass-item .ty{font-size:11px;color:var(--ink2)}
+.mass-item .n{margin-left:auto;font-size:11px;color:var(--ink3)}
+
+/* ===== PRESENTER ===== */
+.pres{background:var(--pres-bg);color:var(--pres-ink)}
+.pres .topbar{background:var(--pres-surface);border-bottom:1px solid var(--pres-line);padding:17px 28px}
+body[data-theme="tl"] .pres .topbar{background:transparent}
+.pres .topbar h1{color:#fff}
+.pres .topbar .sub{color:var(--pres-sub)}
+.pres .btn{background:var(--pres-surface);border-color:var(--pres-line);color:var(--pres-ink)}
+.pres .btn.primary{background:var(--pres-accent);border-color:var(--pres-accent);color:var(--pres-accent-ink)}
+.pres .lbl{font-size:11px;color:var(--pres-sub);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase}
+.pres .content{padding:22px 28px}
+.pgrid figure .slide{outline:2px solid transparent}
+.pgrid figure.cur .slide{outline:2px solid var(--pres-accent)}
+.pgrid figcaption{color:var(--pres-sub)}
+.kbd{font-size:11px;background:var(--pres-surface);border:1px solid var(--pres-line);border-radius:6px;padding:2px 7px;color:var(--pres-sub)}
+
+.tvwrap{background:var(--pres-bg);flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:30px}
+.tv{background:#000;border-radius:12px;padding:12px;box-shadow:0 12px 44px rgba(0,0,0,.6);transition:.3s}
+.tv .scr{position:relative;overflow:hidden;border-radius:5px}
+.tv.land .scr{width:640px;height:360px}.tv.port .scr{width:320px;height:568px}
+.tv .slide{position:absolute;inset:0;border:none;border-radius:0;padding:6%}
+.blackout{position:absolute;inset:0;background:#000;z-index:5;display:none}.blackout.on{display:block}
+</style>
+</head>
+<body data-theme="dx">
+<div class="mocknav" id="mocknav">
+  <span class="brand">PaNIC-<em>Magnific</em></span><span class="tag">V4 · DUAL THEME</span>
+  <span class="spacer"></span>
+  <button class="tbtn" id="btn-dx" onclick="setTheme('dx')">🌿 Đồng Xanh</button>
+  <button class="tbtn" id="btn-tl" onclick="setTheme('tl')">🏺 Tĩnh Lặng</button>
+</div>
+<div class="mocknote" id="mocknote"></div>
+<div class="stage" id="stage"></div>
+<script>
+function slide(title,lines,opts={}){
+  const cls=['slide',opts.color||'',opts.img?'img':''].join(' ');
+  return `<div class="${cls}" style="${opts.style||''}">
+    ${opts.img?`<div class="art"></div><div class="ovl"></div>`:''}
+    ${opts.dk?`<span class="dk">ĐK</span>`:''}
+    ${title?`<div class="t" style="font-size:${opts.ts||'15px'};margin-bottom:${lines?'6px':'0'}">${title}</div>`:''}
+    ${lines?`<div class="l" style="font-size:${opts.ls||'11px'}">${lines.map(l=>`<div>${l}</div>`).join('')}</div>`:''}
+  </div>`;
+}
+function sidebar(active){
+  const it=(id,ic,nm)=>`<a class="${active===id?'on':''}">${ic}&nbsp; ${nm}</a>`;
+  return `<div class="sidebar">
+    <div class="logo"><b>PaNIC-<span>Magnific</span></b><small>Giáo xứ Cẩm Sơn</small></div>
+    <div class="nav">
+      ${it('home','⌂','Trang chủ')}${it('masses','✚','Thánh lễ')}
+      <div class="sec">Thư viện</div>
+      ${it('songs','♪','Bài hát')}${it('prayers','✝','Kinh nguyện')}${it('bg','❖','Ảnh nền')}
+      <div class="sec">Khác</div>
+      ${it('share','⇄','Xuất / Nhập')}${it('settings','⚙','Cài đặt')}
+    </div>
+    <div class="season-chip"><b><span class="dot"></span>Mùa Thường Niên</b>Tuần XV — Năm A · Màu xanh</div>
+  </div>`;
+}
+function shell(active,title,sub,topRight,body,pres=false){
+  return `${pres?'':sidebar(active)}
+  <div class="main ${pres?'pres':''}">
+    <div class="topbar"><div><h1>${title}</h1><div class="sub">${sub}</div></div><div class="row">${topRight||''}</div></div>
+    <div class="content">${body}</div>
+  </div>`;
+}
+const SCREENS=[];
+
+SCREENS.push({id:'home',name:'1 · Trang chủ',note:'Cùng một giao diện — bấm nút theme góc phải trên để đổi giữa Đồng Xanh và Tĩnh Lặng. Trong app thật, lựa chọn nằm ở màn Cài đặt.',
+html:shell('home','Chào buổi tối','Thứ Tư, 15/07/2026 · Tuần XV Thường Niên',
+`<button class="btn">⧉ Nhân bản lễ gần nhất</button><button class="btn primary">＋ Soạn lễ mới</button>`,
+`<h3 class="sec">Lễ sắp tới</h3>
+<div class="two">
+  <div class="card" style="padding:18px">
+    <div class="row" style="justify-content:space-between;margin-bottom:11px">
+      <div><b style="font-size:15.5px;font-family:var(--f-d);color:var(--heading)">Chúa Nhật XVI Thường Niên</b><div style="font-size:12px;color:var(--ink2);margin-top:2px">CN 19/07/2026 · Lễ 2 (07:30) · Năm A</div></div>
+      <span class="badge b-xanh"><span class="dot"></span>Xanh</span></div>
+    <div style="font-size:12.5px;color:var(--ink2);margin-bottom:13px">12 mục · 46 slide · ✓ Đã tải offline</div>
+    <div class="row"><button class="btn primary sm">▶ Trình chiếu</button><button class="btn sm">Sửa</button><button class="btn sm">Xem trước</button></div>
+  </div>
+  <div class="card" style="padding:18px">
+    <div class="row" style="justify-content:space-between;margin-bottom:11px">
+      <div><b style="font-size:15.5px;font-family:var(--f-d);color:var(--heading)">Lễ Thánh Giacôbê, Tông đồ</b><div style="font-size:12px;color:var(--ink2);margin-top:2px">T7 25/07/2026 · Lễ kính</div></div>
+      <span class="badge b-do"><span class="dot" style="background:var(--lit-do)"></span>Đỏ</span></div>
+    <div style="font-size:12.5px;color:var(--ink2);margin-bottom:13px">Chưa soạn xong · thiếu bài Hiệp lễ · ⚠ chưa tải offline</div>
+    <div class="row"><button class="btn sm">Soạn tiếp</button></div>
+  </div>
+</div>
+<h3 class="sec">Thư viện</h3>
+<div class="row" style="gap:14px">
+  ${[['138','bài hát'],['24','kinh nguyện'],['41','ảnh nền'],['36','lễ đã soạn']].map(x=>`<div class="card" style="padding:15px 24px;font-size:13px;color:var(--ink2)"><b style="font-size:24px;display:block;color:var(--primary);font-family:var(--f-d)">${x[0]}</b>${x[1]}</div>`).join('')}
+</div>`)});
+
+SCREENS.push({id:'masses',name:'2 · Danh sách lễ',note:'Tất cả lễ đã soạn — nhân bản ⧉, xuất gói, xóa. Lọc theo tháng.',
+html:shell('masses','Thánh lễ','36 lễ đã soạn',`<select><option>Tháng 07/2026</option></select><button class="btn primary">＋ Soạn lễ mới</button>`,
+`<div class="card">
+<table>
+<tr><th>Ngày</th><th>Tên lễ</th><th>Màu</th><th>Slide</th><th>Offline</th><th></th></tr>
+${[
+ ['CN 19/07','Chúa Nhật XVI Thường Niên — Năm A','b-xanh','Xanh',46,'✓'],
+ ['CN 12/07','Chúa Nhật XV Thường Niên — Năm A','b-xanh','Xanh',44,'✓'],
+ ['CN 05/07','Chúa Nhật XIV Thường Niên — Năm A','b-xanh','Xanh',48,'—'],
+ ['T2 29/06','Thánh Phêrô & Phaolô, Tông đồ','b-do','Đỏ',52,'—'],
+].map(r=>`<tr><td style="color:var(--ink2)">${r[0]}</td><td><b>${r[1]}</b></td>
+<td><span class="badge ${r[2]}">${r[3]}</span></td><td>${r[4]}</td><td>${r[5]}</td>
+<td style="text-align:right;white-space:nowrap"><button class="btn sm">▶</button> <button class="btn sm">Sửa</button> <button class="btn sm">⧉</button> <button class="btn sm danger">✕</button></td></tr>`).join('')}
+</table></div>`)});
+
+SCREENS.push({id:'editor',name:'3 · Trình soạn lễ ★',note:'Màn quan trọng nhất — đổi theme để so trực tiếp: nav viên-thuốc vs vạch-trái, slide gradient xanh vs phẳng ấm.',
+html:shell('masses','Soạn lễ','Chúa Nhật XVI Thường Niên — Năm A',
+`<button class="btn">Xem trước</button><button class="btn primary">▶ Trình chiếu</button>`,
+`<div class="row" style="margin-bottom:16px;gap:14px;align-items:flex-end">
+  <div><label>Ngày lễ</label><input value="19/07/2026" style="width:120px"></div>
+  <div style="flex:1"><label>Tên lễ <span style="font-weight:400;color:var(--ink3)">(tự điền từ lịch — sửa được)</span></label><input value="Chúa Nhật XVI Thường Niên — Năm A" style="width:100%"></div>
+  <div><label>Màu phụng vụ</label><span class="badge b-xanh" style="padding:8px 14px"><span class="dot"></span>Xanh — Thường Niên</span></div>
+</div>
+<div style="display:grid;grid-template-columns:380px 1fr;gap:20px">
+  <div>
+    <div class="row" style="justify-content:space-between;margin-bottom:10px"><b style="font-size:13px;font-family:var(--f-d);color:var(--heading)">Cấu trúc lễ · 12 mục</b>
+    <div class="row" style="gap:6px"><button class="btn sm">＋ Bài hát</button><button class="btn sm">＋ Kinh</button></div></div>
+    ${[
+      ['❖','Poster: Chúa Nhật XVI TN','Poster · nền riêng','1'],
+      ['♪','Hãy Đến Tung Hô Chúa','Ca nhập lễ · Kim Long','5',true],
+      ['✝','Kinh Thương Xót','Kinh nguyện','1'],
+      ['✝','Kinh Vinh Danh','Kinh nguyện','3'],
+      ['♪','TV 22 — Chúa Là Mục Tử','Đáp ca · Thái Nguyên','4'],
+      ['♪','Alleluia — Hoan Ca','Tung hô Tin Mừng','1'],
+      ['✝','Kinh Tin Kính','Kinh nguyện','4'],
+      ['♪','Của Lễ Con Dâng','Dâng lễ · Mi Trầm','5'],
+      ['♪','Bên Lòng Chúa','Hiệp lễ · Phanxicô','6'],
+    ].map(m=>`<div class="mass-item ${m[4]?'sel':''}"><span class="grip">⠿</span><span class="ic">${m[0]}</span>
+      <div><div class="nm">${m[1]}</div><div class="ty">${m[2]}</div></div><span class="n">${m[3]} slide</span></div>`).join('')}
+  </div>
+  <div>
+    <div class="row" style="justify-content:space-between;margin-bottom:10px">
+      <b style="font-size:13px;font-family:var(--f-d);color:var(--heading)">Preview: Hãy Đến Tung Hô Chúa</b>
+      <div class="row" style="gap:6px"><span class="chip on">Ngang</span><span class="chip">Dọc</span></div></div>
+    <div class="gridslides" style="grid-template-columns:repeat(2,1fr)">
+      <figure><div class="thumb">${slide('Hãy Đến Tung Hô Chúa',['Hãy đến tung hô Chúa, reo mừng Đấng cứu thoát ta.','Nào cùng đến trước thánh nhan, dâng lời cảm tạ.'],{ts:'12px',ls:'9.5px'})}</div><figcaption>Slide 1 — PK 1</figcaption></figure>
+      <figure><div class="thumb">${slide('',['Vì Chúa là Thiên Chúa cao cả,','là Đại Vương trổi vượt chư thần.'],{dk:true,ls:'10px'})}</div><figcaption>Slide 2 — ĐK</figcaption></figure>
+      <figure><div class="thumb">${slide('',['Trong tay Ngài là vực sâu lòng đất,','là đỉnh cao muôn núi muôn đồi.'],{ls:'10px'})}</div><figcaption>Slide 3 — PK 2</figcaption></figure>
+      <figure><div class="thumb">${slide('',['Vì Chúa là Thiên Chúa cao cả,','là Đại Vương trổi vượt chư thần.'],{dk:true,ls:'10px'})}</div><figcaption>Slide 4 — ĐK (tự lặp)</figcaption></figure>
+    </div>
+    <div class="hint" style="margin-top:14px">💡 Nền của mục này đang theo mùa (Thường Niên). Bấm để chọn nền riêng hoặc tắt lặp điệp khúc.</div>
+  </div>
+</div>`)});
+
+SCREENS.push({id:'preview',name:'4 · Xem trước toàn lễ',note:'Lưới toàn bộ slide. Slide đổi phong cách theo theme (gradient xanh vs phẳng ấm) nhưng nội dung và bố cục giữ nguyên.',
+html:shell('masses','Xem trước — Chúa Nhật XVI Thường Niên','46 slide · hướng: Ngang',
+`<span class="chip on">Ngang</span><span class="chip">Dọc</span><button class="btn">⬇ Tải offline</button><button class="btn primary">▶ Trình chiếu</button>`,
+`<div class="gridslides">
+  <figure><div class="thumb">${slide('CHÚA NHẬT XVI<br>THƯỜNG NIÊN','',{img:true,ts:'13px'})}</div><figcaption>1 · Poster</figcaption></figure>
+  <figure><div class="thumb">${slide('Hãy Đến Tung Hô Chúa',['Hãy đến tung hô Chúa,','reo mừng Đấng cứu thoát ta.'],{ts:'11px',ls:'9px'})}</div><figcaption>2 · Nhập lễ</figcaption></figure>
+  <figure><div class="thumb">${slide('',['Vì Chúa là Thiên Chúa cao cả,','là Đại Vương trổi vượt chư thần.'],{dk:true,ls:'9px'})}</div><figcaption>3 · ĐK</figcaption></figure>
+  <figure><div class="thumb">${slide('Kinh Thương Xót',['Xin Chúa thương xót chúng con.','Xin Chúa Kitô thương xót chúng con.'],{ts:'11px',ls:'9px'})}</div><figcaption>4 · Kinh</figcaption></figure>
+  <figure><div class="thumb">${slide('Kinh Vinh Danh',['Vinh danh Thiên Chúa trên các tầng trời,','và bình an dưới thế cho người thiện tâm.'],{ts:'11px',ls:'9px'})}</div><figcaption>5 · Kinh</figcaption></figure>
+  <figure><div class="thumb">${slide('TV 22',['Chúa chăn nuôi tôi,','tôi chẳng thiếu thốn chi.'],{ts:'11px',ls:'9px'})}</div><figcaption>6 · Đáp ca</figcaption></figure>
+  <figure><div class="thumb">${slide('Alleluia',['Alleluia, Alleluia!'],{ts:'12px',ls:'10px'})}</div><figcaption>7 · Tin Mừng</figcaption></figure>
+  <figure><div class="thumb"><div class="slide" style="background:#111"></div></div><figcaption>8 · Slide trống</figcaption></figure>
+</div>
+<div style="text-align:center;color:var(--ink3);font-size:12px;margin-top:14px">… 38 slide còn lại …</div>`)});
+
+SCREENS.push({id:'songs',name:'5 · Thư viện bài hát',note:'Search theo tên/tác giả/câu lời + lọc theo thể loại phụng vụ bằng chip.',
+html:shell('songs','Thư viện bài hát','138 bài',`<button class="btn primary">＋ Thêm bài hát</button>`,
+`<div class="row" style="margin-bottom:14px">
+  <input placeholder="🔍 Tìm theo tên, tác giả, câu lời…" style="flex:1">
+  ${['Tất cả','Nhập lễ','Đáp ca','Dâng lễ','Hiệp lễ','Kết lễ','Đức Mẹ'].map((c,i)=>`<span class="chip ${i==0?'on':''}">${c}</span>`).join('')}
+</div>
+<div class="card"><table>
+<tr><th>Tên bài</th><th>Thể loại</th><th>Tác giả</th><th>Slide</th><th>Dùng gần nhất</th><th></th></tr>
+${[
+ ['Hãy Đến Tung Hô Chúa','Nhập lễ','Kim Long',5,'CN 19/07'],
+ ['Của Lễ Con Dâng','Dâng lễ','Mi Trầm',5,'CN 19/07'],
+ ['Bên Lòng Chúa','Hiệp lễ','Phanxicô',6,'CN 12/07'],
+ ['Tán Tụng Hồng Ân','Kết lễ','Hải Linh & Vũ Đình Trác',4,'CN 12/07'],
+ ['Lạy Mẹ Xin Yên Ủi','Đức Mẹ','Nguyễn Khắc Tuần',4,'T7 05/07'],
+].map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td style="color:var(--ink2)">${r[2]}</td><td>${r[3]}</td><td style="color:var(--ink2)">${r[4]}</td>
+<td style="text-align:right"><button class="btn sm">Sửa</button> <button class="btn sm danger">✕</button></td></tr>`).join('')}
+</table></div>`)});
+
+SCREENS.push({id:'songedit',name:'6 · Soạn bài hát',note:'Dán lời thô bên trái → slide tự sinh bên phải. Dòng "ĐK:" = điệp khúc, tự lặp sau mỗi phiên khúc. Link gộp ↑ / tách ↕ chỉnh điểm ngắt.',
+html:shell('songs','Soạn bài hát','Hãy Đến Tung Hô Chúa',
+`<button class="btn">Hủy</button><button class="btn primary">Lưu bài hát</button>`,
+`<div class="row" style="margin-bottom:14px;gap:14px">
+  <div style="flex:1"><label>Tên bài</label><input value="Hãy Đến Tung Hô Chúa" style="width:100%"></div>
+  <div><label>Thể loại</label><select><option>Ca nhập lễ</option></select></div>
+  <div><label>Tác giả</label><input value="Kim Long" style="width:140px"></div>
+</div>
+<div class="two">
+  <div>
+    <label>Lời bài hát (dán thô — mỗi khối cách nhau 1 dòng trống)</label>
+    <textarea style="width:100%;height:330px;line-height:1.7;font-size:13px">Hãy đến tung hô Chúa, reo mừng Đấng cứu thoát ta.
+Nào cùng đến trước thánh nhan, dâng lời cảm tạ.
+
+ĐK: Vì Chúa là Thiên Chúa cao cả,
+là Đại Vương trổi vượt chư thần.
+
+Trong tay Ngài là vực sâu lòng đất,
+là đỉnh cao muôn núi muôn đồi.</textarea>
+    <div class="row" style="margin-top:10px;font-size:12.5px"><input type="checkbox" checked style="width:auto"> Tự lặp điệp khúc sau mỗi phiên khúc</div>
+  </div>
+  <div>
+    <div class="row" style="justify-content:space-between;margin-bottom:8px"><label style="margin:0">Slide tự sinh — 4 slide (ngang, tối đa 4 dòng)</label>
+    <div class="row" style="gap:6px"><span class="chip on">Ngang</span><span class="chip">Dọc</span></div></div>
+    <div class="gridslides" style="grid-template-columns:repeat(2,1fr)">
+      <figure><div class="thumb">${slide('Hãy Đến Tung Hô Chúa',['Hãy đến tung hô Chúa, reo mừng Đấng cứu thoát ta.','Nào cùng đến trước thánh nhan, dâng lời cảm tạ.'],{ts:'12px',ls:'9.5px'})}</div><figcaption>1 · PK 1 · <a style="color:var(--primary);font-weight:700">tách ↕</a></figcaption></figure>
+      <figure><div class="thumb">${slide('',['Vì Chúa là Thiên Chúa cao cả,','là Đại Vương trổi vượt chư thần.'],{dk:true,ls:'10px'})}</div><figcaption>2 · ĐK</figcaption></figure>
+      <figure><div class="thumb">${slide('',['Trong tay Ngài là vực sâu lòng đất,','là đỉnh cao muôn núi muôn đồi.'],{ls:'10px'})}</div><figcaption>3 · PK 2 · <a style="color:var(--primary);font-weight:700">gộp ↑</a></figcaption></figure>
+      <figure><div class="thumb">${slide('',['Vì Chúa là Thiên Chúa cao cả,','là Đại Vương trổi vượt chư thần.'],{dk:true,ls:'10px'})}</div><figcaption>4 · ĐK (tự lặp)</figcaption></figure>
+    </div>
+  </div>
+</div>`)});
+
+SCREENS.push({id:'prayers',name:'7 · Kinh nguyện',note:'Kinh phổ biến seed sẵn (🔒 = kinh gốc của app — nhân bản để sửa, bản gốc giữ nguyên).',
+html:shell('prayers','Thư viện kinh nguyện','24 kinh · 12 kinh có sẵn',`<button class="btn primary">＋ Thêm kinh</button>`,
+`<div class="card"><table>
+<tr><th>Tên kinh</th><th>Slide</th><th>Nguồn</th><th></th></tr>
+${[
+ ['Kinh Thương Xót',1,'🔒 Có sẵn'],['Kinh Vinh Danh',3,'🔒 Có sẵn'],['Kinh Tin Kính (Nicêa)',4,'🔒 Có sẵn'],
+ ['Kinh Lạy Cha',1,'🔒 Có sẵn'],['Kinh Cáo Mình',2,'🔒 Có sẵn'],['Kinh Lạy Nữ Vương',2,'Tự soạn'],
+ ['Kinh Cầu Các Thánh Tử Đạo VN',6,'Tự soạn'],
+].map(r=>`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td style="color:var(--ink2)">${r[2]}</td>
+<td style="text-align:right"><button class="btn sm">${String(r[2]).includes('🔒')?'⧉ Nhân bản':'Sửa'}</button></td></tr>`).join('')}
+</table></div>`)});
+
+SCREENS.push({id:'bg',name:'8 · Ảnh nền',note:'Tag theo mùa phụng vụ + chấm focal point (vòng tròn trắng) để crop đẹp cả ngang lẫn dọc từ một ảnh.',
+html:shell('bg','Thư viện ảnh nền','41 ảnh',`<button class="btn primary">⬆ Upload ảnh</button>`,
+`<div class="row" style="margin-bottom:14px">${['Tất cả','Vọng','Giáng Sinh','Chay','Phục Sinh','Thường Niên','Đức Mẹ','Tử đạo VN'].map((c,i)=>`<span class="chip ${i==0?'on':''}">${c}</span>`).join('')}</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px">
+${[
+ ['linear-gradient(150deg,#2E7D46,#7BBF93)','Thường Niên','b-xanh','62%','40%'],
+ ['linear-gradient(150deg,#6B3FA0,#B08AD8)','Mùa Chay','b-tim','30%','55%'],
+ ['linear-gradient(150deg,#C9A227,#F0DFA0)','Phục Sinh','b-trang','50%','35%'],
+ ['linear-gradient(150deg,#B3261E,#E58B85)','Tử đạo VN','b-do','70%','50%'],
+ ['linear-gradient(150deg,#1F4A2C,#3E7B54)','Vọng','b-tim','45%','30%'],
+ ['linear-gradient(150deg,#264D73,#8FB7D9)','Đức Mẹ','b-trang','55%','45%'],
+].map(b=>`<div class="bgcard"><div class="im" style="background:${b[0]}"><span class="fo" style="left:${b[3]};top:${b[4]}"></span></div>
+<div class="meta"><span class="badge ${b[2]}">${b[1]}</span><button class="btn sm ghost">✎</button></div></div>`).join('')}
+</div>
+<div class="hint" style="margin-top:16px">💡 Kéo vòng tròn trắng đến điểm quan trọng của ảnh (khuôn mặt thánh, thánh giá…) — app sẽ giữ điểm đó trong khung khi crop ngang hoặc dọc.</div>`)});
+
+SCREENS.push({id:'presenter',name:'9 · Presenter View ★',note:'Màn tối cũng đổi theo theme: rừng sẫm (Đồng Xanh) vs nâu than ấm (Tĩnh Lặng). Phím ← → Space B hoạt động.',html:'',builder:buildPresenter});
+SCREENS.push({id:'tv',name:'10 · Màn hình tivi',note:'Slide trên tivi đổi phong cách theo theme. Thử Ngang/Dọc và Đèn đen (phím B).',html:'',builder:buildTV});
+
+SCREENS.push({id:'settings',name:'11 · Cài đặt',note:'Cài đặt đầy đủ — mục "Giao diện" chọn theme ngay trong app (bấm thử!). Số dòng tối đa riêng cho ngang & dọc.',html:'',builder:buildSettings});
+
+SCREENS.push({id:'share',name:'12 · Xuất / Nhập gói lễ',note:'Chia sẻ lễ đã soạn giữa các giáo xứ bằng file .magnific.json (kèm ảnh).',
+html:shell('share','Xuất / Nhập gói lễ','',``,
+`<div class="two" style="max-width:860px">
+  <div class="card" style="padding:20px">
+    <h3 class="sec" style="margin-top:0">⬆ Xuất gói lễ</h3>
+    <label>Chọn lễ</label><select style="width:100%;margin-bottom:12px"><option>Chúa Nhật XVI Thường Niên — 19/07/2026</option></select>
+    <div class="row" style="font-size:13px;margin-bottom:6px"><input type="checkbox" checked style="width:auto"> Kèm bài hát & kinh trong lễ</div>
+    <div class="row" style="font-size:13px;margin-bottom:14px"><input type="checkbox" checked style="width:auto"> Kèm ảnh nền & poster</div>
+    <button class="btn primary">Xuất file .magnific.json (≈ 4.2 MB)</button>
+  </div>
+  <div class="card" style="padding:20px">
+    <h3 class="sec" style="margin-top:0">⬇ Nhập gói lễ</h3>
+    <div style="border:2px dashed var(--line);border-radius:var(--r);padding:36px;text-align:center;color:var(--ink2);font-size:13px;margin-bottom:12px">
+      Kéo thả file <b>.magnific.json</b> vào đây<br>hoặc <a style="color:var(--primary);font-weight:700">chọn file</a>
+    </div>
+    <div class="hint">Bài hát trùng tên sẽ được hỏi: giữ bản của mình / ghi đè / giữ cả hai.</div>
+  </div>
+</div>`)});
+
+function buildSettings(){
+  return shell('settings','Cài đặt','',``,
+`<div class="two" style="max-width:840px">
+  <div class="card" style="padding:18px">
+    <h3 class="sec" style="margin-top:0">Giao diện</h3>
+    <label>Chủ đề màu</label>
+    <div class="row">
+      <span class="chip ${theme==='dx'?'on':''}" onclick="setTheme('dx');render()">🌿 Đồng Xanh</span>
+      <span class="chip ${theme==='tl'?'on':''}" onclick="setTheme('tl');render()">🏺 Tĩnh Lặng</span>
+    </div>
+    <div class="hint" style="margin-top:12px">Chủ đề đổi toàn bộ giao diện soạn lễ, màn điều khiển và phong cách slide mặc định.</div>
+  </div>
+  <div class="card" style="padding:18px">
+    <h3 class="sec" style="margin-top:0">Giáo xứ</h3>
+    <label>Tên giáo xứ</label><input value="Giáo xứ Cẩm Sơn" style="width:100%;margin-bottom:12px">
+    <label>Giáo phận</label><input value="Đà Nẵng" style="width:100%">
+  </div>
+  <div class="card" style="padding:18px">
+    <h3 class="sec" style="margin-top:0">Trình chiếu</h3>
+    <div class="two">
+      <div><label>Số dòng tối đa — Ngang</label><input value="4" style="width:100%"></div>
+      <div><label>Số dòng tối đa — Dọc</label><input value="6" style="width:100%"></div>
+    </div>
+    <label style="margin-top:12px">Hướng tivi mặc định</label>
+    <div class="row"><span class="chip on">Tự phát hiện</span><span class="chip">Ngang</span><span class="chip">Dọc</span></div>
+  </div>
+  <div class="card" style="padding:18px">
+    <h3 class="sec" style="margin-top:0">Lịch phụng vụ</h3>
+    <div class="row" style="font-size:13px;margin-bottom:10px"><input type="checkbox" checked style="width:auto"> Chúa Thăng Thiên dời sang Chúa Nhật (lệ VN)</div>
+    <div class="row" style="font-size:13px"><input type="checkbox" checked style="width:auto"> Các Thánh Tử Đạo VN mừng vào Chúa Nhật gần 24/11</div>
+  </div>
+  <div class="card" style="padding:18px">
+    <h3 class="sec" style="margin-top:0">Chữ trên slide</h3>
+    <label>Cỡ chữ cơ bản</label>
+    <div class="row"><span class="chip">Nhỏ</span><span class="chip on">Vừa</span><span class="chip">Lớn</span></div>
+    <div class="hint" style="margin-top:12px">Chữ luôn tự thu nhỏ nếu tràn khung — không bao giờ mất chữ.</div>
+  </div>
+</div>`);
+}
+
+const DECK=[
+  {t:'CHÚA NHẬT XVI<br>THƯỜNG NIÊN',l:[],img:true,cap:'Poster'},
+  {t:'Hãy Đến Tung Hô Chúa',l:['Hãy đến tung hô Chúa, reo mừng Đấng cứu thoát ta.','Nào cùng đến trước thánh nhan, dâng lời cảm tạ.'],cap:'Nhập lễ · PK1'},
+  {t:'',l:['Vì Chúa là Thiên Chúa cao cả,','là Đại Vương trổi vượt chư thần.'],dk:true,cap:'Nhập lễ · ĐK'},
+  {t:'Kinh Thương Xót',l:['Xin Chúa thương xót chúng con.','Xin Chúa Kitô thương xót chúng con.'],cap:'Kinh'},
+  {t:'TV 22 — Đáp ca',l:['Chúa chăn nuôi tôi, tôi chẳng thiếu thốn chi.'],cap:'Đáp ca'},
+];
+let curIdx=1,blackOn=false,tvOrient='land';
+function deckSlide(d,ts,ls){return slide(d.t,d.l.length?d.l:null,{img:d.img,dk:d.dk,ts,ls});}
+function buildPresenter(){
+  const d=DECK[curIdx],nx=DECK[curIdx+1],pv=DECK[curIdx-1];
+  return `<div class="main pres" style="width:100%">
+    <div class="topbar"><div><h1>Chúa Nhật XVI Thường Niên</h1><div class="sub">Slide ${curIdx+1} / ${DECK.length} · <span id="clock"></span></div></div>
+    <div class="row"><span style="font-size:12px;color:var(--pres-accent)">● Tivi đã kết nối</span>
+    <button class="btn sm" onclick="toggleBlack();render()">B · Đèn đen ${blackOn?'BẬT':'tắt'}</button></div></div>
+    <div class="content">
+      <div style="display:grid;grid-template-columns:1fr 300px;gap:20px">
+        <div>
+          <div class="lbl">Đang chiếu ${blackOn?'— màn hình đen':''}</div>
+          <div class="thumb" style="position:relative">${deckSlide(d,'26px','17px')}<div class="blackout ${blackOn?'on':''}" style="border-radius:10px"></div></div>
+          <div class="row" style="margin-top:12px;justify-content:center;gap:8px">
+            <button class="btn" onclick="go(curIdx-1)">← Lùi</button>
+            <button class="btn primary" onclick="go(curIdx+1)">Tiếp →</button>
+            <span class="kbd">Space</span><span class="kbd">←</span><span class="kbd">→</span><span class="kbd">B</span></div>
+        </div>
+        <div>
+          <div class="lbl">Tiếp theo</div>
+          <div class="thumb">${nx?deckSlide(nx,'13px','9.5px'):'<div class="slide" style="font-size:12px">— Hết lễ —</div>'}</div>
+          <div class="lbl" style="margin-top:12px">Trước đó</div>
+          <div class="thumb" style="opacity:.55">${pv?deckSlide(pv,'13px','9.5px'):'<div class="slide" style="font-size:12px">— Đầu lễ —</div>'}</div>
+        </div>
+      </div>
+      <div class="lbl" style="margin:18px 0 8px">Tất cả slide — click để nhảy nhanh</div>
+      <div class="gridslides pgrid" style="grid-template-columns:repeat(5,1fr)">
+        ${DECK.map((s,i)=>`<figure class="${i===curIdx?'cur':''}" onclick="go(${i})"><div class="thumb">${deckSlide(s,'9px','7px')}</div><figcaption>${i+1} · ${s.cap}</figcaption></figure>`).join('')}
+      </div>
+    </div></div>`;
+}
+function buildTV(){
+  const d=DECK[curIdx];
+  const on='background:var(--pres-accent);border-color:var(--pres-accent);color:var(--pres-accent-ink)';
+  const off='background:var(--pres-surface);border-color:var(--pres-line);color:var(--pres-ink)';
+  return `<div class="main tvwrap" style="width:100%">
+    <div class="row" style="gap:8px">
+      <button class="btn sm" onclick="tvOrient='land';render()" style="${tvOrient=='land'?on:off}">▭ Tivi ngang</button>
+      <button class="btn sm" onclick="tvOrient='port';render()" style="${tvOrient=='port'?on:off}">▯ Tivi dọc</button>
+      <button class="btn sm" onclick="toggleBlack();render()" style="${off}">B · Đèn đen</button>
+      <button class="btn sm" onclick="go(curIdx-1)" style="${off}">←</button>
+      <button class="btn sm" onclick="go(curIdx+1)" style="${off}">→</button>
+    </div>
+    <div class="tv ${tvOrient}"><div class="scr">
+      ${deckSlide(d,tvOrient=='land'?'34px':'26px',tvOrient=='land'?'22px':'19px')}
+      <div class="blackout ${blackOn?'on':''}"></div>
+    </div></div>
+    <div style="color:var(--pres-sub);font-size:12px">Slide ${curIdx+1}/${DECK.length} · layout tự đổi theo hướng — dọc chữ lớn hơn, tối đa 6 dòng.</div>
+  </div>`;
+}
+function toggleBlack(){blackOn=!blackOn;}
+function go(i){if(i<0||i>=DECK.length)return;curIdx=i;render();}
+
+/* ===== theme switch ===== */
+let theme='dx';
+try{theme=localStorage.getItem('magnific-theme')||'dx';}catch(e){}
+function setTheme(t){
+  theme=t;document.body.dataset.theme=t;
+  try{localStorage.setItem('magnific-theme',t);}catch(e){}
+  document.getElementById('btn-dx').className='tbtn'+(t==='dx'?' ton-dx':'');
+  document.getElementById('btn-tl').className='tbtn'+(t==='tl'?' ton-tl':'');
+}
+let activeScreen='home';
+function render(){
+  const stage=document.getElementById('stage');const scr=SCREENS.find(s=>s.id===activeScreen);
+  document.getElementById('mocknote').textContent=scr.note;
+  stage.innerHTML=`<div class="frame on">${scr.builder?scr.builder():scr.html}</div>`;
+  document.querySelectorAll('#mocknav button:not(.tbtn)').forEach(b=>b.classList.toggle('on',b.dataset.id===activeScreen));
+  const ck=document.getElementById('clock');if(ck)ck.textContent=new Date().toLocaleTimeString('vi-VN');
+}
+const nav=document.getElementById('mocknav');
+const spacer=nav.querySelector('.spacer');
+SCREENS.forEach(s=>{const b=document.createElement('button');b.textContent=s.name;b.dataset.id=s.id;b.onclick=()=>{activeScreen=s.id;render();};nav.insertBefore(b,spacer);});
+document.addEventListener('keydown',e=>{
+  if(activeScreen!=='presenter'&&activeScreen!=='tv')return;
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(curIdx+1);}
+  if(e.key==='ArrowLeft'){e.preventDefault();go(curIdx-1);}
+  if(e.key==='b'||e.key==='B'){toggleBlack();render();}
+});
+setInterval(()=>{const ck=document.getElementById('clock');if(ck)ck.textContent=new Date().toLocaleTimeString('vi-VN');},1000);
+setTheme(theme);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   DESIGN TOKENS — hệ 2 theme (CLAUDE.md mục 6)
+   data-theme đặt trên <html>, đọc từ localStorage trước render.
+   ============================================================ */
+:root,
+[data-theme='dx'] {
+  /* 🌿 Đồng Xanh (mặc định) */
+  --f-display: var(--font-baloo);
+  --bg: #f5f8f3;
+  --surface: #ffffff;
+  --surface-2: #eaf2e9;
+  --ink: #22331f;
+  --ink-2: #66795f;
+  --ink-3: #9aab93;
+  --line: #dce6d8;
+  --heading: #1f4a2c;
+  --primary: #2e7d46;
+  --primary-hover: #276a3c;
+  --primary-soft: #e4f1e8;
+  --dk-badge: #c9a227;
+  --radius: 16px;
+  --radius-2: 12px;
+
+  --pres-bg: #152318;
+  --pres-surface: #1f3324;
+  --pres-ink: #e7f0e4;
+  --pres-line: #2c4633;
+  --pres-accent: #5cbf7a;
+  --pres-accent-ink: #0f1712;
+  --pres-sub: #8faf98;
+
+  --lit-xanh: #2e7d46;
+  --lit-tim: #6b3fa0;
+  --lit-do: #b3261e;
+  --lit-trang: #c9a227;
+  --lit-hong: #d77fa1;
+
+  --slide-bg: linear-gradient(150deg, #ffffff 0%, #e9f4ea 100%);
+  --slide-title: #1f4a2c;
+  --slide-strip: 4px;
+}
+
+[data-theme='tl'] {
+  /* 🏺 Tĩnh Lặng */
+  --f-display: var(--font-fraunces);
+  --bg: #f6f4ef;
+  --surface: #ffffff;
+  --surface-2: #efebe2;
+  --ink: #242220;
+  --ink-2: #6f6a61;
+  --ink-3: #a7a196;
+  --line: #e7e2d8;
+  --heading: #242220;
+  --primary: #b0553b;
+  --primary-hover: #994a32;
+  --primary-soft: #f4e5de;
+  --dk-badge: #5e6b54;
+  --radius: 14px;
+  --radius-2: 10px;
+
+  --pres-bg: #1c1a16;
+  --pres-surface: #26231d;
+  --pres-ink: #ede9e0;
+  --pres-line: #38342b;
+  --pres-accent: #d08a6e;
+  --pres-accent-ink: #241a12;
+  --pres-sub: #a79d8c;
+
+  --lit-xanh: #5e7a4e;
+  --lit-tim: #6e5296;
+  --lit-do: #b0453a;
+  --lit-trang: #b08a46;
+  --lit-hong: #c58aa0;
+
+  --slide-bg: #fbfaf6;
+  --slide-title: #242220;
+  --slide-strip: 3px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-bvp), sans-serif;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-token-2 border border-line bg-surface px-4 py-2 text-[13px] font-semibold leading-none text-ink transition-colors;
+    /* chiều cao cố định → nút text và nút icon luôn bằng nhau khi đứng cạnh nhau */
+    min-height: 38px;
+    /* canh giữa theo chiều dọc khi các nút nằm inline cạnh nhau (tránh lệch theo baseline) */
+    vertical-align: middle;
+  }
+  .btn:hover {
+    border-color: var(--ink-3);
+  }
+  .btn-primary {
+    @apply border-transparent text-white;
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+  .btn-primary:hover {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+    min-height: 30px;
+  }
+  .card {
+    @apply rounded-token border border-line bg-surface;
+  }
+  .chip {
+    @apply inline-flex cursor-pointer items-center rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs text-ink-2 transition-colors;
+  }
+  .chip-on {
+    @apply border-transparent font-bold text-white;
+    background: var(--primary);
+  }
+  [data-theme='tl'] .chip {
+    background: transparent;
+  }
+  [data-theme='tl'] .chip-on {
+    background: var(--ink);
+    color: var(--surface);
+  }
+  .field {
+    @apply w-full rounded-token-2 border border-line bg-surface px-3.5 py-2 text-[13px] text-ink outline-none;
+  }
+  .field:focus {
+    border-color: var(--primary);
+  }
+  .field-label {
+    @apply mb-1.5 block text-xs font-bold text-ink-2;
+  }
+}
+
+/* ============================================================
+   Khác biệt CẤU TRÚC giữa 2 theme (mục 6 CLAUDE.md)
+   ============================================================ */
+
+/* Nav đang chọn — dx: viên thuốc; tl: vạch trái */
+.nav-link {
+  @apply flex items-center gap-3 px-5 py-2 text-[13.5px] text-ink-2 relative;
+}
+.nav-link:hover {
+  color: var(--heading);
+}
+[data-theme='dx'] .nav-link {
+  border-radius: 0 22px 22px 0;
+  margin-right: 12px;
+}
+[data-theme='dx'] .nav-link.active {
+  background: var(--primary-soft);
+  color: var(--heading);
+  font-weight: 700;
+}
+[data-theme='tl'] .nav-link.active {
+  color: var(--ink);
+  font-weight: 600;
+}
+[data-theme='tl'] .nav-link.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--primary);
+}
+
+/* Sidebar — dx: nền trắng; tl: trùng nền trang */
+.app-sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+}
+[data-theme='tl'] .app-sidebar {
+  background: var(--bg);
+}
+
+/* Topbar — dx: nền surface + viền dưới; tl: trong suốt, tiêu đề lớn hơn */
+.app-topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  z-index: 10;
+  /* shadow trong suốt cùng hình dạng ở trạng thái đầu → khi cuộn chỉ đổi alpha
+     (nội suy mượt; tránh transition từ `none` vốn không animate được) */
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0);
+  transition: box-shadow 0.2s ease, background 0.2s ease;
+}
+/* Khi content cuộn xuống: header nổi lên bằng shadow đổ xuống nội dung */
+.app-topbar.is-scrolled {
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.28);
+}
+[data-theme='tl'] .app-topbar {
+  background: transparent;
+  border-bottom: none;
+}
+/* Tĩnh Lặng trong suốt khi ở đầu trang → khi cuộn phải có nền đặc để đọc rõ */
+[data-theme='tl'] .app-topbar.is-scrolled {
+  background: var(--bg);
+  box-shadow: 0 6px 18px -10px rgba(0, 0, 0, 0.24);
+}
+.app-topbar h1 {
+  font-family: var(--f-display);
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--heading);
+}
+[data-theme='tl'] .app-topbar h1 {
+  font-size: 25px;
+  font-weight: 500;
+}
+
+/* ============================================================
+   Scrollbar theo UI (mảnh, bo tròn, màu token) — thay mặc định
+   ============================================================ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-3) transparent;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ink-3);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-2);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Tooltip render qua portal ở <body> (components/TooltipLayer.tsx) để không bị
+   overflow của bảng/card cắt — dùng data-tip="..." trên phần tử. */
